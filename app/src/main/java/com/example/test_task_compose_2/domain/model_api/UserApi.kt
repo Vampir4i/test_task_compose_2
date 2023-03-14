@@ -1,6 +1,6 @@
-package com.example.test_task_compose_2.data.retrofit.model
+package com.example.test_task_compose_2.domain.model_api
 
-import com.example.test_task_compose_2.ui.model.UserUi
+import com.example.test_task_compose_2.domain.model_ui.UserUi
 import com.google.gson.annotations.SerializedName
 
 data class UserApi(
@@ -8,6 +8,8 @@ data class UserApi(
     val id: Int? = null,
     @SerializedName("avatar_url")
     val avatarUrl: String? = null,
+    @SerializedName("node_id")
+    val nodeId: String? = null,
     @SerializedName("html_url")
     val htmlUrl: String? = null,
     val name: String? = null,
@@ -25,10 +27,11 @@ data class UserApi(
     val createdAt: String? = null
 )
 
-fun UserApi.userApiToUi() = UserUi(
+fun UserApi.apiToUi() = UserUi(
     login = this.login ?: "",
     id = this.id ?: 0,
     avatarUrl = this.avatarUrl ?: "",
+    nodeId = this.nodeId ?: "",
     htmlUrl = this.htmlUrl ?: "",
     name = this.name ?: "",
     location = this.location ?: "",

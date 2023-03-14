@@ -1,6 +1,6 @@
-package com.example.test_task_compose_2.data.retrofit.model
+package com.example.test_task_compose_2.domain.model_api
 
-import com.example.test_task_compose_2.ui.model.ListsUserUi
+import com.example.test_task_compose_2.domain.model_ui.ListsUserUi
 import com.google.gson.annotations.SerializedName
 
 data class ListsUserApi(
@@ -12,7 +12,7 @@ data class ListsUserApi(
     val nodeId: String? = null
 )
 
-fun ListsUserApi.listsUserApiToUi(): ListsUserUi = ListsUserUi(
+fun ListsUserApi.apiToUi(): ListsUserUi = ListsUserUi(
     login = this.login ?: "",
     id = this.id ?: 0,
     avatarUrl = this.avatarUrl ?: "",

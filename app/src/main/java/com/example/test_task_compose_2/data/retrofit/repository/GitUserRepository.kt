@@ -1,9 +1,10 @@
 package com.example.test_task_compose_2.data.retrofit.repository
 
 import com.example.test_task_compose_2.data.retrofit.GitUserService
-import com.example.test_task_compose_2.data.retrofit.model.*
-import com.example.test_task_compose_2.ui.model.ListsUserUi
-import com.example.test_task_compose_2.ui.model.UserUi
+import com.example.test_task_compose_2.domain.model_api.ErrorResponse
+import com.example.test_task_compose_2.domain.model_api.apiToUi
+import com.example.test_task_compose_2.domain.model_ui.ListsUserUi
+import com.example.test_task_compose_2.domain.model_ui.UserUi
 import javax.inject.Inject
 
 class GitUserRepository @Inject constructor(
@@ -18,7 +19,7 @@ class GitUserRepository @Inject constructor(
             perPage = perPage
         )
         return if (response.isSuccessful)
-            response.body()?.map { it.listsUserApiToUi() } ?: listOf()
+            response.body()?.map { it.apiToUi() } ?: listOf()
         else throw ErrorResponse(
             code = response.raw().code,
             msg = response.raw().message
@@ -32,7 +33,7 @@ class GitUserRepository @Inject constructor(
             userName = userName
         )
         return if (response.isSuccessful)
-            response.body()?.userApiToUi()
+            response.body()?.apiToUi()
         else throw ErrorResponse(
             code = response.code(),
             msg = response.message()

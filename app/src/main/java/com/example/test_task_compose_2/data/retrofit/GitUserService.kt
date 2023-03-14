@@ -1,7 +1,7 @@
 package com.example.test_task_compose_2.data.retrofit
 
-import com.example.test_task_compose_2.data.retrofit.model.ListsUserApi
-import com.example.test_task_compose_2.data.retrofit.model.UserApi
+import com.example.test_task_compose_2.domain.model_api.ListsUserApi
+import com.example.test_task_compose_2.domain.model_api.UserApi
 import com.example.test_task_compose_2.util.Constants
 import retrofit2.Response
 import retrofit2.http.GET

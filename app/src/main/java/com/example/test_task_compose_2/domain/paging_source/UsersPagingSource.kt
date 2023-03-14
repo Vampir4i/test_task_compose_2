@@ -2,9 +2,9 @@ package com.example.test_task_compose_2.domain.paging_source
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.example.test_task_compose_2.data.retrofit.model.ErrorResponse
+import com.example.test_task_compose_2.domain.model_api.ErrorResponse
 import com.example.test_task_compose_2.data.retrofit.repository.GitUserRepository
-import com.example.test_task_compose_2.ui.model.ListsUserUi
+import com.example.test_task_compose_2.domain.model_ui.ListsUserUi
 import com.example.test_task_compose_2.util.Constants
 
 class UsersPagingSource(

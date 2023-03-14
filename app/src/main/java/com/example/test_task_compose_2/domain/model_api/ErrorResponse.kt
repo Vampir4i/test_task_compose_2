@@ -1,4 +1,4 @@
-package com.example.test_task_compose_2.data.retrofit.model
+package com.example.test_task_compose_2.domain.model_api
 
 class ErrorResponse(
     val code: Int,

@@ -1,8 +1,8 @@
 package com.example.test_task_compose_2.domain.use_case
 
-import com.example.test_task_compose_2.data.retrofit.model.ErrorResponse
+import com.example.test_task_compose_2.domain.model_api.ErrorResponse
 import com.example.test_task_compose_2.data.retrofit.repository.GitUserRepository
-import com.example.test_task_compose_2.ui.model.UserUi
+import com.example.test_task_compose_2.domain.model_ui.UserUi
 import javax.inject.Inject
 
 class GetUserUseCase @Inject constructor(
