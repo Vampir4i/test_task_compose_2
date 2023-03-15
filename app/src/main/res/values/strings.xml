@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Test_task_compose_2</string>
+    <string name="homescreen_toolbar_label">GIT USERS</string>
 </resources>

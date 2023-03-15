@@ -1,6 +1,7 @@
 package com.example.test_task_compose_2
 
 import android.util.Log
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
@@ -32,7 +33,7 @@ class TestVM @Inject constructor(
         viewModelScope.launch {
             val user = getUserUseCase("mojombo")
             user.onSuccess {
-                Log.d("myLog", "USER ${it.login} ${it.id}")
+//                Log.d("myLog", "USER ${it.login} ${it.id}")
             }
             user.onFailure {
                 when (it) {

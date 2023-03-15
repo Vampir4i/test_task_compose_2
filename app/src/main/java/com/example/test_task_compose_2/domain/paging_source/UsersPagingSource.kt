@@ -11,10 +11,7 @@ class UsersPagingSource(
     private val gitUserRepository: GitUserRepository
 ): PagingSource<Int, ListsUserUi>() {
     override fun getRefreshKey(state: PagingState<Int, ListsUserUi>): Int? {
-        return state.anchorPosition?.let { anchorPosition ->
-            state.closestPageToPosition(anchorPosition)?.prevKey?.plus(Constants.USER_PER_PAGE)
-                ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(Constants.USER_PER_PAGE)
-        }
+        return 0
     }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ListsUserUi> {
