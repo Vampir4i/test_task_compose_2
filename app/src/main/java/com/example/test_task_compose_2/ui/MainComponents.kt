@@ -13,9 +13,13 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.example.test_task_compose_2.ui.screen.home_screen.HomeScreen
+import com.example.test_task_compose_2.ui.screen.user_screen.UserScreen
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import com.google.accompanist.web.WebView
+import com.google.accompanist.web.rememberWebViewState
+import java.net.URLEncoder
 
 @Composable
 fun NavigationComponent() {
@@ -46,22 +50,41 @@ fun NavigationComponent() {
             exitTransition = { exitTransaction() },
             arguments = listOf(navArgument("login") { type = NavType.StringType })
         ) {
-
+            val login = it.arguments?.getString("login") ?: ""
+            UserScreen(
+                configuration = configuration,
+                login = login,
+                toBackScreen = { toBackScreen() },
+                openWeb = { url ->
+                    val encodedUrl = URLEncoder.encode(url, "UTF-8")
+                    navController.navigate("${Screen.WEB_VIEW.name}/$encodedUrl")
+                }
+            )
+        }
+        composable(
+            route = "${Screen.WEB_VIEW.name}/{url}",
+            enterTransition = { enterTransaction() },
+            exitTransition = { exitTransaction() },
+            arguments = listOf(navArgument("url") {type = NavType.StringType})
+        ) {
+            val url = it.arguments?.getString("url") ?: ""
+            val webViewState = rememberWebViewState(url = url)
+            WebView(state = webViewState)
         }
     }
 }
 
 fun AnimatedContentScope<NavBackStackEntry>.enterTransaction(): EnterTransition? {
     return when (initialState.destination.route) {
-        "${Screen.PROFILE.name}/{login}" -> {
-            slideIntoContainer(
-                towards = AnimatedContentScope.SlideDirection.Right,
-                animationSpec = tween(700)
-            )
-        }
         Screen.HOME.name -> {
             slideIntoContainer(
                 towards = AnimatedContentScope.SlideDirection.Left,
+                animationSpec = tween(700)
+            )
+        }
+        "${Screen.WEB_VIEW.name}/{url}" -> {
+            slideIntoContainer(
+                towards = AnimatedContentScope.SlideDirection.Right,
                 animationSpec = tween(700)
             )
         }
@@ -71,15 +94,15 @@ fun AnimatedContentScope<NavBackStackEntry>.enterTransaction(): EnterTransition?
 
 fun AnimatedContentScope<NavBackStackEntry>.exitTransaction(): ExitTransition? {
     return when (targetState.destination.route) {
-        "${Screen.PROFILE.name}/{login}" -> {
-            slideOutOfContainer(
-                towards = AnimatedContentScope.SlideDirection.Left,
-                animationSpec = tween(700)
-            )
-        }
         Screen.HOME.name -> {
             slideOutOfContainer(
                 towards = AnimatedContentScope.SlideDirection.Right,
+                animationSpec = tween(700)
+            )
+        }
+        "${Screen.WEB_VIEW.name}/{url}" -> {
+            slideOutOfContainer(
+                towards = AnimatedContentScope.SlideDirection.Left,
                 animationSpec = tween(700)
             )
         }
@@ -89,5 +112,6 @@ fun AnimatedContentScope<NavBackStackEntry>.exitTransaction(): ExitTransition? {
 
 enum class Screen {
     HOME,
-    PROFILE
+    PROFILE,
+    WEB_VIEW
 }

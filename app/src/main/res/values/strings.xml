@@ -2,6 +2,16 @@
     <string name="app_name">Test_task_compose_2</string>
     <string name="homescreen_toolbar_label">GIT USERS</string>
     <string name="users_loading">Users loading\nPlease wait…</string>
+    <string name="user_loading">User loading\nPlease wait…</string>
     <string name="users_loading_failed">%1$s\nPull down to refresh…</string>
+    <string name="user_loading_failed">%1$s\nPlease return back</string>
     <string name="loading_failed">Loading failed\n%1$s</string>
+    <string name="email">Email</string>
+    <string name="location">Location</string>
+    <string name="twitter_username">Twitter username</string>
+    <string name="public_repos">Public repos</string>
+    <string name="public_gists">Public gists</string>
+    <string name="followers">Followers</string>
+    <string name="following">Following</string>
+    <string name="join_at">Join at</string>
 </resources>

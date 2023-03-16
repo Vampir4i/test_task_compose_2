@@ -4,7 +4,15 @@ fun handleLoadUsers(code: Int): String {
     return when (code) {
         304 -> "Not modified"
         401 -> "Requires authentication"
-        403 -> "Forbidden"
+        else -> ""
+    }
+}
+
+fun handleLoadUser(code: Int): String {
+    return when (code) {
+        304 -> "Not modified"
+        401 -> "Requires authentication"
+        404 -> "Resource not found"
         else -> ""
     }
 }

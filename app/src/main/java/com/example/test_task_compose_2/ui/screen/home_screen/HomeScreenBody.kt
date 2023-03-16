@@ -3,7 +3,6 @@
 package com.example.test_task_compose_2.ui.screen.home_screen
 
 import android.content.res.Configuration
-import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -20,7 +19,11 @@ import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
+import com.example.test_task_compose_2.R
 import com.example.test_task_compose_2.domain.model_ui.ListsUserUi
+import com.example.test_task_compose_2.domain.model_ui.LoadingState
+import com.example.test_task_compose_2.ui.LoadFailedScreen
+import com.example.test_task_compose_2.ui.LoadingScreen
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -70,12 +73,15 @@ fun LoadingStateScreens(
     val uiState by uiStateFlow.collectAsState()
     when (val loadingState = uiState.loadingState) {
         is LoadingState.Error -> {
-            LoadFailedScreen(message = loadingState.message)
+            LoadFailedScreen(
+                stringId = R.string.users_loading_failed,
+                message = loadingState.message
+            )
         }
         LoadingState.Init -> {}
 
         LoadingState.Loading -> {
-            LoadingScreen()
+            LoadingScreen(R.string.users_loading)
         }
     }
 }

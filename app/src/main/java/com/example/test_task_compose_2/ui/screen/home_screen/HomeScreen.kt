@@ -14,7 +14,7 @@ import com.example.test_task_compose_2.R
 fun HomeScreen(
     configuration: Configuration,
     toProfileScreen: (String) -> Unit,
-    homeViewModel: HomeViewModel = hiltViewModel()
+    homeViewModel: HomeScreenViewModel = hiltViewModel()
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),

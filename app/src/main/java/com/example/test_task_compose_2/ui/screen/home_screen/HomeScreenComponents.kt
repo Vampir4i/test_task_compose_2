@@ -2,6 +2,7 @@
 
 package com.example.test_task_compose_2.ui.screen.home_screen
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListScope
@@ -22,6 +23,7 @@ import androidx.paging.LoadState
 import coil.compose.AsyncImage
 import com.example.test_task_compose_2.R
 import com.example.test_task_compose_2.domain.model_api.ErrorResponse
+import com.example.test_task_compose_2.domain.model_ui.LoadingState
 import com.example.test_task_compose_2.util.handleLoadUsers
 
 @Composable
@@ -94,56 +96,6 @@ fun HomeScreenToolbar(
             text = label,
             style = MaterialTheme.typography.h1,
             color = MaterialTheme.colors.onPrimary
-        )
-    }
-}
-
-@Composable
-fun LoadingScreen() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(
-                MaterialTheme.colors.surface.copy(
-                    alpha = 0.5f
-                )
-            ),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text(
-            text = stringResource(id = R.string.users_loading),
-            style = MaterialTheme.typography.h2,
-            color = MaterialTheme.colors.onSurface,
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .padding(8.dp)
-        )
-        CircularProgressIndicator()
-    }
-}
-
-@Composable
-fun LoadFailedScreen(message: String) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(
-                MaterialTheme.colors.surface.copy(
-                    alpha = 0.5f
-                )
-            ),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text(
-            text = stringResource(
-                id = R.string.users_loading_failed,
-                message
-            ),
-            style = MaterialTheme.typography.h2,
-            color = Color.Red,
-            textAlign = TextAlign.Center
         )
     }
 }

@@ -9,6 +9,7 @@ class RoomUserRepository @Inject constructor(
 ) {
     suspend fun getAllUsers() = userDao.getAll()
     fun getAllUsersFlow() = userDao.getAllFlow()
+    suspend fun getUserById(id: Int) = userDao.getUserById(id)
     suspend fun deleteUser(user: UserDb) = userDao.delete(user)
     suspend fun insertUser(user: UserDb) = userDao.insert(user)
 }
