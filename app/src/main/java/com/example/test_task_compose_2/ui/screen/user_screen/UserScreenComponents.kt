@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.test_task_compose_2.R
 import com.example.test_task_compose_2.domain.model_ui.UserUi
+import com.example.test_task_compose_2.util.VibrateUtil
 
 @Composable
 fun UserScreenToolbar(
@@ -51,7 +52,10 @@ fun UserScreenToolbar(
             modifier = Modifier
                 .padding(end = 8.dp)
                 .size(28.dp)
-                .clickable { toBackScreen() },
+                .clickable {
+                    VibrateUtil.vibrate(VibrateUtil.simpleClickVibrationEffect())
+                    toBackScreen()
+                },
             contentDescription = "arrow_back"
         )
         Text(
@@ -107,6 +111,7 @@ fun AvatarCard(
                 ),
                 textAlign = TextAlign.Center,
                 modifier = Modifier.clickable {
+                    VibrateUtil.vibrate(VibrateUtil.simpleClickVibrationEffect())
                     openWeb(githubUrl)
                 }
             )
@@ -129,6 +134,7 @@ fun UserInfoCard(
     deleteUserFromDb: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -152,6 +158,9 @@ fun UserInfoCard(
                 modifier = Modifier
                     .padding(end = 8.dp)
                     .clickable {
+                        if (isBookmarked)
+                            VibrateUtil.vibrate(VibrateUtil.deleteFromDbVibrationEffect())
+                        else VibrateUtil.vibrate(VibrateUtil.addToDbVibrationEffect())
                         if (isBookmarked) deleteUserFromDb() else addUserToDb()
                     },
                 contentDescription = "item_bookmarked"

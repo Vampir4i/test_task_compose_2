@@ -2,7 +2,6 @@
 
 package com.example.test_task_compose_2.ui.screen.home_screen
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListScope
@@ -24,6 +23,7 @@ import coil.compose.AsyncImage
 import com.example.test_task_compose_2.R
 import com.example.test_task_compose_2.domain.model_api.ErrorResponse
 import com.example.test_task_compose_2.domain.model_ui.LoadingState
+import com.example.test_task_compose_2.util.VibrateUtil
 import com.example.test_task_compose_2.util.handleLoadUsers
 
 @Composable
@@ -37,7 +37,10 @@ fun GitUserListItem(
     Card(
         modifier = modifier.padding(8.dp),
         elevation = 4.dp,
-        onClick = onItemClick
+        onClick = {
+            VibrateUtil.vibrate(VibrateUtil.simpleClickVibrationEffect())
+            onItemClick()
+        }
     ) {
         Row(
             modifier = Modifier

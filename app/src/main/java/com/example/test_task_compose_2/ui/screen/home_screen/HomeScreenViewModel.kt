@@ -17,8 +17,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(
-    private val getUsersPagerUseCase: GetUsersPagerUseCase,
-    private val getUsersFromDbUseCase: GetUsersFromDbUseCase,
+    getUsersPagerUseCase: GetUsersPagerUseCase,
+    getUsersFromDbUseCase: GetUsersFromDbUseCase,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeScreenUiState())

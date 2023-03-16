@@ -5,6 +5,7 @@ import com.example.test_task_compose_2.domain.model_api.ErrorResponse
 import com.example.test_task_compose_2.domain.model_api.apiToUi
 import com.example.test_task_compose_2.domain.model_ui.ListsUserUi
 import com.example.test_task_compose_2.domain.model_ui.UserUi
+import com.example.test_task_compose_2.util.isOnline
 import javax.inject.Inject
 
 class GitUserRepository @Inject constructor(
@@ -29,6 +30,10 @@ class GitUserRepository @Inject constructor(
     suspend fun getUser(
         userName: String
     ): UserUi? {
+        if (!isOnline()) throw ErrorResponse(
+            code = 0,
+            msg = "Connection error"
+        )
         val response = gitUserService.getUser(
             userName = userName
         )

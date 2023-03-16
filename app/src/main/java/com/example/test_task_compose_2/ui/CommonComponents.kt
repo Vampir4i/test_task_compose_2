@@ -16,7 +16,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.example.test_task_compose_2.R
 
 @Composable
 fun LoadingScreen(@StringRes stringId: Int) {
@@ -25,7 +24,7 @@ fun LoadingScreen(@StringRes stringId: Int) {
             .fillMaxSize()
             .background(
                 MaterialTheme.colors.surface.copy(
-                    alpha = 0.5f
+                    alpha = 0.8f
                 )
             ),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -39,7 +38,7 @@ fun LoadingScreen(@StringRes stringId: Int) {
             modifier = Modifier
                 .padding(8.dp)
         )
-        CircularProgressIndicator()
+        CircularProgressIndicator(color = MaterialTheme.colors.onPrimary)
     }
 }
 

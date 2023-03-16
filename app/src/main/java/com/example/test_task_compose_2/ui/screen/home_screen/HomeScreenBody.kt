@@ -24,6 +24,7 @@ import com.example.test_task_compose_2.domain.model_ui.ListsUserUi
 import com.example.test_task_compose_2.domain.model_ui.LoadingState
 import com.example.test_task_compose_2.ui.LoadFailedScreen
 import com.example.test_task_compose_2.ui.LoadingScreen
+import com.example.test_task_compose_2.util.VibrateUtil
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -41,7 +42,13 @@ fun HomeScreenBody(
     val usersDb = usersDbFlow.collectAsState(initial = listOf())
     val refreshing = remember { mutableStateOf(false) }
     val pullRefreshState =
-        rememberPullRefreshState(refreshing = refreshing.value, onRefresh = { users.refresh() })
+        rememberPullRefreshState(
+            refreshing = refreshing.value,
+            onRefresh = {
+                VibrateUtil.vibrate(VibrateUtil.simpleClickVibrationEffect())
+                users.refresh()
+            }
+        )
     Box(
         modifier = modifier
             .fillMaxSize()

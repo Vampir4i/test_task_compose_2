@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class UserScreenViewModel @Inject constructor(
-    private val savedState: SavedStateHandle,
+    savedState: SavedStateHandle,
     private val getUserUseCase: GetUserUseCase,
     private val getUserFromDbUseCase: GetUserFromDbUseCase,
     private val insertUserToDbUseCase: InsertUserToDbUseCase,

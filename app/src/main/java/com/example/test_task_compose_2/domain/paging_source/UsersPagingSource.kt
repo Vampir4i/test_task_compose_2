@@ -6,6 +6,7 @@ import com.example.test_task_compose_2.domain.model_api.ErrorResponse
 import com.example.test_task_compose_2.data.retrofit.repository.GitUserRepository
 import com.example.test_task_compose_2.domain.model_ui.ListsUserUi
 import com.example.test_task_compose_2.util.Constants
+import com.example.test_task_compose_2.util.isOnline
 
 class UsersPagingSource(
     private val gitUserRepository: GitUserRepository
@@ -16,6 +17,10 @@ class UsersPagingSource(
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ListsUserUi> {
         return try {
+            if (!isOnline()) throw ErrorResponse(
+                code = 0,
+                msg = "Connection error"
+            )
             val since = params.key ?: 0
             val users = gitUserRepository.getUsers(
                 since = since,
