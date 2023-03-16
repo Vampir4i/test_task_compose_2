@@ -1,18 +1,14 @@
 package com.example.test_task_compose_2
 
 import android.util.Log
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
-import com.example.test_task_compose_2.data.room.dao.UserDao
 import com.example.test_task_compose_2.domain.model_api.ErrorResponse
 import com.example.test_task_compose_2.domain.model_ui.ListsUserUi
 import com.example.test_task_compose_2.domain.use_case.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

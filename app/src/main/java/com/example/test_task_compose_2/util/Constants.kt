@@ -3,6 +3,6 @@ package com.example.test_task_compose_2.util
 object Constants {
     const val BASE_URL = "https://api.github.com/"
     const val USER_PER_PAGE = 10
-    const val token = "Bearer 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"
+    const val token = ""
     const val USER_TABLE = "user_table"
 }

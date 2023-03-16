@@ -15,16 +15,21 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import coil.compose.AsyncImage
 import com.example.test_task_compose_2.R
+import com.example.test_task_compose_2.domain.model_api.ErrorResponse
+import com.example.test_task_compose_2.util.handleLoadUsers
 
 @Composable
 fun GitUserListItem(
     onItemClick: () -> Unit,
     avatarUrl: String,
     login: String,
+    isBookmarked: Boolean,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -55,6 +60,15 @@ fun GitUserListItem(
                 text = login,
                 style = MaterialTheme.typography.h2
             )
+            Spacer(modifier = Modifier.weight(1f))
+            if (isBookmarked)
+                Icon(
+                    painter = painterResource(
+                        id = R.drawable.bookmark_enable
+                    ),
+                    modifier = Modifier.padding(end = 8.dp),
+                    contentDescription = "item_bookmarked"
+                )
         }
     }
 }
@@ -84,31 +98,75 @@ fun HomeScreenToolbar(
     }
 }
 
-fun LazyListScope.loadingRefreshState(state: LoadState) {
+@Composable
+fun LoadingScreen() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(
+                MaterialTheme.colors.surface.copy(
+                    alpha = 0.5f
+                )
+            ),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(
+            text = stringResource(id = R.string.users_loading),
+            style = MaterialTheme.typography.h2,
+            color = MaterialTheme.colors.onSurface,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .padding(8.dp)
+        )
+        CircularProgressIndicator()
+    }
+}
+
+@Composable
+fun LoadFailedScreen(message: String) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(
+                MaterialTheme.colors.surface.copy(
+                    alpha = 0.5f
+                )
+            ),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(
+            text = stringResource(
+                id = R.string.users_loading_failed,
+                message
+            ),
+            style = MaterialTheme.typography.h2,
+            color = Color.Red,
+            textAlign = TextAlign.Center
+        )
+    }
+}
+
+fun loadingRefreshState(
+    state: LoadState,
+    updateLoadingState: (LoadingState) -> Unit,
+) {
     when (state) {
-        is LoadState.Error -> item {
-            Text(
-                text = "Loading failed",
-                color = Color.Red
+        is LoadState.Error -> {
+            updateLoadingState(
+                LoadingState.Error(
+                    handleLoadUsers((state.error as ErrorResponse).code)
+                )
             )
         }
-        is LoadState.Loading -> item {
-            Column(
-                modifier = Modifier
-                    .fillParentMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Text(
-                    text = "Loading",
-                    modifier = Modifier
-                        .padding(8.dp)
-                )
-                CircularProgressIndicator(color = Color.Black)
-            }
+        is LoadState.Loading -> {
+            updateLoadingState(LoadingState.Loading)
         }
 
-        else -> {}
+        else -> {
+            updateLoadingState(LoadingState.Init)
+        }
     }
 }
 
@@ -116,49 +174,36 @@ fun LazyListScope.loadingAppendState(state: LoadState) {
     when (state) {
         is LoadState.Error -> item {
             Text(
-                text = "Loading failed",
-                color = Color.Red
+                text = stringResource(
+                    id = R.string.loading_failed,
+                    handleLoadUsers((state.error as ErrorResponse).code)
+                ),
+                style = MaterialTheme.typography.h1,
+                color = Color.Red,
+                textAlign = TextAlign.Center
             )
         }
         is LoadState.Loading -> item {
             Column(
                 modifier = Modifier
-                    .fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Text(text = "Loading")
-                CircularProgressIndicator(color = Color.Black)
-            }
-        }
-        else -> {}
-    }
-}
-
-fun LazyGridScope.loadingRefreshState(state: LoadState) {
-    when (state) {
-        is LoadState.Error -> item {
-            Text(
-                text = "Loading failed",
-                color = Color.Red
-            )
-        }
-        is LoadState.Loading -> item {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize(),
+                    .fillMaxWidth()
+                    .background(
+                        MaterialTheme.colors.surface
+                    ),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = "Loading",
+                    text = stringResource(id = R.string.users_loading),
+                    style = MaterialTheme.typography.body1,
+                    color = MaterialTheme.colors.onSurface,
+                    textAlign = TextAlign.Center,
                     modifier = Modifier
                         .padding(8.dp)
                 )
-                CircularProgressIndicator(color = Color.Black)
+                CircularProgressIndicator()
             }
         }
-
         else -> {}
     }
 }
@@ -167,19 +212,34 @@ fun LazyGridScope.loadingAppendState(state: LoadState) {
     when (state) {
         is LoadState.Error -> item {
             Text(
-                text = "Loading failed",
-                color = Color.Red
+                text = stringResource(
+                    id = R.string.loading_failed,
+                    handleLoadUsers((state.error as ErrorResponse).code)
+                ),
+                style = MaterialTheme.typography.h1,
+                color = Color.Red,
+                textAlign = TextAlign.Center
             )
         }
         is LoadState.Loading -> item {
             Column(
                 modifier = Modifier
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .background(
+                        MaterialTheme.colors.surface
+                    ),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                Text(text = "Loading")
-                CircularProgressIndicator(color = Color.Black)
+                Text(
+                    text = stringResource(id = R.string.users_loading),
+                    style = MaterialTheme.typography.body1,
+                    color = MaterialTheme.colors.onSurface,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .padding(8.dp)
+                )
+                CircularProgressIndicator()
             }
         }
         else -> {}

@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalMaterialApi::class)
+@file:OptIn(ExperimentalMaterialApi::class, ExperimentalMaterialApi::class)
 
 package com.example.test_task_compose_2.ui.screen.home_screen
 
@@ -9,12 +9,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.paging.PagingData
@@ -23,48 +22,104 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import com.example.test_task_compose_2.domain.model_ui.ListsUserUi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun HomeScreenBody(
     configuration: Configuration,
     usersDbFlow: Flow<List<ListsUserUi>>,
     usersApiFlow: Flow<PagingData<ListsUserUi>>,
+    uiStateFlow: StateFlow<HomeScreenUiState>,
     toProfileScreen: (String) -> Unit,
+    updateLoadingState: (LoadingState) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Log.d("myLog", "HomeScreenBody")
     val users = usersApiFlow.collectAsLazyPagingItems()
+    val usersDb = usersDbFlow.collectAsState(initial = listOf())
     val refreshing = remember { mutableStateOf(false) }
     val pullRefreshState =
         rememberPullRefreshState(refreshing = refreshing.value, onRefresh = { users.refresh() })
     Box(
-        modifier = modifier.pullRefresh(pullRefreshState)
+        modifier = modifier
+            .fillMaxSize()
+            .pullRefresh(pullRefreshState)
     ) {
-        when (configuration.orientation) {
-            Configuration.ORIENTATION_LANDSCAPE -> {
-                GitUsersGrid(users = users, toProfileScreen = toProfileScreen)
-            }
-            Configuration.ORIENTATION_PORTRAIT -> {
-                GitUserList(users = users, toProfileScreen = toProfileScreen)
-            }
-            else -> {}
-        }
-        PullRefreshIndicator(
-            refreshing.value,
-            pullRefreshState,
-            Modifier.align(Alignment.TopCenter)
+        UserList(
+            configuration = configuration,
+            users = users,
+            usersDb = usersDb,
+            toProfileScreen = toProfileScreen,
+            updateLoadingState = updateLoadingState
         )
+        LoadingStateScreens(uiStateFlow = uiStateFlow)
+
+        PullRefreshIndicator(
+            refreshing = refreshing.value,
+            state = pullRefreshState,
+            backgroundColor = MaterialTheme.colors.primary,
+            contentColor = MaterialTheme.colors.onPrimary,
+            modifier = Modifier.align(Alignment.TopCenter)
+        )
+    }
+}
+
+@Composable
+fun LoadingStateScreens(
+    uiStateFlow: StateFlow<HomeScreenUiState>
+) {
+    val uiState by uiStateFlow.collectAsState()
+    when (val loadingState = uiState.loadingState) {
+        is LoadingState.Error -> {
+            LoadFailedScreen(message = loadingState.message)
+        }
+        LoadingState.Init -> {}
+
+        LoadingState.Loading -> {
+            LoadingScreen()
+        }
+    }
+}
+
+@Composable
+fun UserList(
+    configuration: Configuration,
+    users: LazyPagingItems<ListsUserUi>,
+    usersDb: State<List<ListsUserUi>>,
+    toProfileScreen: (String) -> Unit,
+    updateLoadingState: (LoadingState) -> Unit
+) {
+    when (configuration.orientation) {
+        Configuration.ORIENTATION_LANDSCAPE -> {
+            GitUsersGrid(
+                users = users,
+                usersDb = usersDb,
+                toProfileScreen = toProfileScreen,
+                updateLoadingState = updateLoadingState
+            )
+        }
+        Configuration.ORIENTATION_PORTRAIT -> {
+            GitUserList(
+                users = users,
+                usersDb = usersDb,
+                toProfileScreen = toProfileScreen,
+                updateLoadingState = updateLoadingState
+            )
+        }
+        else -> {}
     }
 }
 
 @Composable
 fun GitUserList(
     users: LazyPagingItems<ListsUserUi>,
+    usersDb: State<List<ListsUserUi>>,
     toProfileScreen: (String) -> Unit,
+    updateLoadingState: (LoadingState) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val usersFromDb by usersDb
     LazyColumn(
-        modifier = modifier
+        modifier = modifier.fillMaxSize()
     ) {
         items(
             items = users,
@@ -73,11 +128,15 @@ fun GitUserList(
             GitUserListItem(
                 onItemClick = { toProfileScreen(user?.login ?: "") },
                 avatarUrl = user?.avatarUrl ?: "",
-                login = user?.login ?: ""
+                login = user?.login ?: "",
+                isBookmarked = usersFromDb.contains(user)
             )
         }
 
-        loadingRefreshState(state = users.loadState.refresh)
+        loadingRefreshState(
+            state = users.loadState.refresh,
+            updateLoadingState = updateLoadingState
+        )
         loadingAppendState(state = users.loadState.append)
     }
 }
@@ -85,22 +144,29 @@ fun GitUserList(
 @Composable
 fun GitUsersGrid(
     users: LazyPagingItems<ListsUserUi>,
+    usersDb: State<List<ListsUserUi>>,
     toProfileScreen: (String) -> Unit,
+    updateLoadingState: (LoadingState) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val usersFromDb by usersDb
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
-        modifier = modifier
+        modifier = modifier.fillMaxSize()
     ) {
         items(users.itemCount) { index ->
             GitUserListItem(
                 onItemClick = { toProfileScreen(users[index]?.login ?: "") },
                 avatarUrl = users[index]?.avatarUrl ?: "",
-                login = users[index]?.login ?: ""
+                login = users[index]?.login ?: "",
+                isBookmarked = usersFromDb.contains(users[index])
             )
         }
 
-        loadingRefreshState(state = users.loadState.refresh)
+        loadingRefreshState(
+            state = users.loadState.refresh,
+            updateLoadingState = updateLoadingState
+        )
         loadingAppendState(state = users.loadState.append)
     }
 }

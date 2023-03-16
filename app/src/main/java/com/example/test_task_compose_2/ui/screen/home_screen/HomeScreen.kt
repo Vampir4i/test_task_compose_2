@@ -1,7 +1,6 @@
 package com.example.test_task_compose_2.ui.screen.home_screen
 
 import android.content.res.Configuration
-import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
@@ -17,7 +16,6 @@ fun HomeScreen(
     toProfileScreen: (String) -> Unit,
     homeViewModel: HomeViewModel = hiltViewModel()
 ) {
-    Log.d("myLog", "HomeScreen")
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -32,7 +30,9 @@ fun HomeScreen(
             configuration = configuration,
             usersDbFlow = homeViewModel.usersDbFlow,
             usersApiFlow = homeViewModel.getUsersPager,
+            uiStateFlow = homeViewModel.uiState,
             toProfileScreen = toProfileScreen,
+            updateLoadingState = homeViewModel::updateLoadingState,
             modifier = Modifier.padding(innerPadding)
         )
     }

@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Test_task_compose_2</string>
     <string name="homescreen_toolbar_label">GIT USERS</string>
+    <string name="users_loading">Users loading\nPlease wait…</string>
+    <string name="users_loading_failed">%1$s\nPull down to refresh…</string>
+    <string name="loading_failed">Loading failed\n%1$s</string>
 </resources>

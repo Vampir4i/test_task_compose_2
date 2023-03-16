@@ -21,7 +21,6 @@ class UsersPagingSource(
                 since = since,
                 perPage = Constants.USER_PER_PAGE
             )
-
             LoadResult.Page(
                 data = users,
                 prevKey = null,
