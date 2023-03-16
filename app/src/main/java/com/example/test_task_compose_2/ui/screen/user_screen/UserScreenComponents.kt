@@ -215,6 +215,7 @@ fun UserInfoWithOrientation(
     addUserToDb: () -> Unit,
     deleteUserFromDb: () -> Unit,
     openWeb: (String) -> Unit,
+    shape: Shape,
     modifierAvatar: Modifier,
     modifierInfo: Modifier
 ) {
@@ -222,10 +223,7 @@ fun UserInfoWithOrientation(
         avatarUrl = userUi.avatarUrl,
         name = userUi.name,
         githubUrl = userUi.htmlUrl,
-        shape = MaterialTheme.shapes.medium.copy(
-            topStart = CornerSize(0.dp),
-            topEnd = CornerSize(0.dp)
-        ),
+        shape = shape,
         openWeb = openWeb,
         modifier = modifierAvatar
     )

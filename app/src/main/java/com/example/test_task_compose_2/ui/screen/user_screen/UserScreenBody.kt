@@ -3,6 +3,7 @@ package com.example.test_task_compose_2.ui.screen.user_screen
 import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -74,6 +75,10 @@ fun UserInfoScreen(
                     addUserToDb = addUserToDb,
                     deleteUserFromDb = deleteUserFromDb,
                     openWeb = openWeb,
+                    shape = MaterialTheme.shapes.medium.copy(
+                        topStart = CornerSize(0.dp),
+                        topEnd = CornerSize(0.dp)
+                    ),
                     modifierAvatar = Modifier
                         .weight(2f)
                         .fillMaxWidth(),
@@ -95,6 +100,10 @@ fun UserInfoScreen(
                     addUserToDb = addUserToDb,
                     deleteUserFromDb = deleteUserFromDb,
                     openWeb = openWeb,
+                    shape = MaterialTheme.shapes.medium.copy(
+                        topStart = CornerSize(0.dp),
+                        bottomStart = CornerSize(0.dp)
+                    ),
                     modifierAvatar = Modifier
                         .weight(2f)
                         .fillMaxHeight(),
